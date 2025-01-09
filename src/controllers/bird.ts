@@ -113,7 +113,6 @@ const getASingleBird = catchAsync(
     const blogId = req.params.id
     const blog = await req.context.services?.bird.getSingleBird(blogId)
 
-    // console.log(blog)
     return res.status(200).json(blog)
   }
 )
@@ -147,23 +146,20 @@ const updateABird = catchAsync(
       color: cleanColorsArray
     }
 
-    const updatedBlog = await req.context.services?.bird.updateBird(birdId, {
+    const updatedBird = await req.context.services?.bird.updateBird(birdId, {
       ...req.body,
       habitat: cleanHabitatArray,
       appearance: appearanceObj
     })
 
-    // console.log(updatedBlog)
-    return res.status(200).json(updatedBlog)
+    return res.status(200).json(updatedBird)
   }
 )
 
-//------delete blog--------------
 const deleteBird = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const birdId = req.params.id
 
-    //---delete blog---------------
     const deleteBird = await req.context.services?.bird.deleteBird(birdId)
 
     return res.status(200).json(deleteBird)

@@ -5,7 +5,6 @@ import { IAppContext, InitAdmin } from "../types/app"
 import createError from "../utils/appError"
 import { IBird, IBirdSchema } from "../types/bird"
 
-// import sendEmailToUser from "../utils/email"
 export class BirdServices extends InitAdmin {
   constructor(context: IAppContext) {
     super(context)
@@ -48,7 +47,6 @@ export class BirdServices extends InitAdmin {
     }
   }
 
-  //----update blog post--------------------
 
   updateBird = async (birdId: string, input: IBird) => {
     try {
@@ -74,7 +72,6 @@ export class BirdServices extends InitAdmin {
     }
   }
 
-  //-------delete blog post----------------
   deleteBird = async (birdId: string) => {
     console.log("birdId", birdId)
     try {
