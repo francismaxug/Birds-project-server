@@ -57,7 +57,7 @@ export class BirdServices extends InitAdmin {
         throw createError("Bird not found", 404)
       }
 
-      const updatedBlog = await this.queryDB.birdModel.findByIdAndUpdate(
+      await this.queryDB.birdModel.findByIdAndUpdate(
         birdId,
         {
           ...input
@@ -66,8 +66,8 @@ export class BirdServices extends InitAdmin {
       )
 
       return {
-        message: "Bird updated successfully",
-        blog: updatedBlog
+        status: "success",
+        message: "Bird updated successfully"
       }
     } catch (err) {
       throw err

@@ -25,7 +25,7 @@ const createNewBird = catchAsync(
 
     const appearanceObj = {
       size: JSON.parse(appearance).size,
-      colors: cleanColorsArray
+      color: cleanColorsArray
     }
 
     const files = req.files?.photos
@@ -134,10 +134,24 @@ const updateABird = catchAsync(
     const birdId = req.params.id
     console.log(req.body)
 
-    const updatedBlog = await req.context.services?.bird.updateBird(
-      birdId,
-      req.body
-    )
+    const cleanHabitatArray = req.body.habitat
+      ?.split(" ")
+      ?.filter((item: string) => item !== "")
+
+    const cleanColorsArray = JSON.parse(req.body.appearance)
+      .colors?.split(" ")
+      ?.filter((item: string) => item !== "")
+
+    const appearanceObj = {
+      size: JSON.parse(req.body.appearance).size,
+      color: cleanColorsArray
+    }
+
+    const updatedBlog = await req.context.services?.bird.updateBird(birdId, {
+      ...req.body,
+      habitat: cleanHabitatArray,
+      appearance: appearanceObj
+    })
 
     // console.log(updatedBlog)
     return res.status(200).json(updatedBlog)

@@ -1,7 +1,7 @@
 import { Document, Model, Types } from "mongoose"
 interface IAppearance {
   size: string
-  colors: string[]
+  color: string[]
 }
 
 export interface IBird {
