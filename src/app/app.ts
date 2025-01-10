@@ -20,17 +20,14 @@ export const startApp = async (config: Config) => {
 
     appContext.services = await startServices(appContext)
 
-    // const corsOptions = {
-    //   origin:
-    //     process.env.NODE_ENV === "development"
-    //       ? "http://localhost:3000"
-    //       : "https://upci-church-app.vercel.app",
-    //   credentials: true
-    // }
+    const corsOptions = {
+      origin: "https://birds-project-client-wgzl.vercel.app",
+      credentials: true
+    }
     if (process.env.NODE_ENV === "development") {
       app.use(morgan("dev"))
     }
-    app.use(cors({ origin: "*" }))
+    app.use(cors(corsOptions))
     app.use(cookieParser())
     app.use(express.json())
     app.use(express.urlencoded({ extended: false }))
