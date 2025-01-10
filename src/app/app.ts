@@ -30,12 +30,12 @@ export const startApp = async (config: Config) => {
     if (process.env.NODE_ENV === "development") {
       app.use(morgan("dev"))
     }
-    app.use(cors())
+    app.use(cors({ origin: "*" }))
     app.use(cookieParser())
     app.use(express.json())
     app.use(express.urlencoded({ extended: false }))
     app.use((req: Request, res: Response, next: NextFunction) => {
-      (req as Request & { context?: IAppContext }).context = appContext
+      ;(req as Request & { context?: IAppContext }).context = appContext
       next()
     })
     app.use(fileUpload({}))
