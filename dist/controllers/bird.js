@@ -20,10 +20,10 @@ const createNewBird = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
     const { commonName, scientificName, description, habitat, appearance } = req.body;
     const cleanHabitatArray = (_a = habitat === null || habitat === void 0 ? void 0 : habitat.split(" ")) === null || _a === void 0 ? void 0 : _a.filter((item) => item !== "");
     const cleanColorsArray = (_c = (_b = JSON.parse(appearance)
-        .colors) === null || _b === void 0 ? void 0 : _b.split(" ")) === null || _c === void 0 ? void 0 : _c.filter((item) => item !== "");
+        .color) === null || _b === void 0 ? void 0 : _b.split(" ")) === null || _c === void 0 ? void 0 : _c.filter((item) => item !== "");
     const appearanceObj = {
         size: JSON.parse(appearance).size,
-        colors: cleanColorsArray
+        color: cleanColorsArray
     };
     const files = (_d = req.files) === null || _d === void 0 ? void 0 : _d.photos;
     if (!req.files) {
@@ -58,23 +58,17 @@ const createNewBird = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
             const mimetype = file.mimetype;
             const tobase64 = imageData.toString("base64");
             // Log first 100 characters of base64 string to verify it's correct
-            console.log("Base64 Preview:", tobase64.substring(0, 100));
             // Upload to Cloudinary
             const upload = yield cloudinary_1.default.uploader.upload(`data:${mimetype};base64,${tobase64}`, {
                 folder: "upci-church-uploads"
             });
-            console.log("Cloudinary upload success:", {
-                url: upload.secure_url,
-                publicId: upload.public_id
-            });
             uploadResults.push(upload.secure_url);
         }
         catch (error) {
-            console.error("Error processing file:");
             // You might want to add specific error handling here
         }
     }
-    console.log("Upload Results:", uploadResults);
+    // console.log("Upload Results:", uploadResults)
     // Save data to your service
     const data = yield ((_f = req.context.services) === null || _f === void 0 ? void 0 : _f.bird.createBird({
         commonName,
@@ -84,41 +78,44 @@ const createNewBird = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter
         appearance: appearanceObj,
         photos: uploadResults
     }));
-    console.log("Service Response:", data);
+    // console.log("Service Response:", data)
     return res.status(200).json(data);
 }));
 exports.createNewBird = createNewBird;
 const getASingleBird = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _g;
-    const blogId = req.params.id;
-    const blog = yield ((_g = req.context.services) === null || _g === void 0 ? void 0 : _g.bird.getSingleBird(blogId));
-    // console.log(blog)
-    return res.status(200).json(blog);
+    const birdId = req.params.id;
+    const bird = yield ((_g = req.context.services) === null || _g === void 0 ? void 0 : _g.bird.getSingleBird(birdId));
+    return res.status(200).json(bird);
 }));
 exports.getASingleBird = getASingleBird;
 const getAllBirds = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // console.log(req)
     var _h;
-    const allBlogs = yield ((_h = req.context.services) === null || _h === void 0 ? void 0 : _h.bird.getAllBirds());
-    return res.status(200).json(allBlogs);
+    const allBirds = yield ((_h = req.context.services) === null || _h === void 0 ? void 0 : _h.bird.getAllBirds());
+    return res.status(200).json(allBirds);
 }));
 exports.getAllBirds = getAllBirds;
 //---update-bird------------
 const updateABird = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _j;
+    var _j, _k, _l, _m, _o;
     const birdId = req.params.id;
-    console.log(req.body);
-    const updatedBlog = yield ((_j = req.context.services) === null || _j === void 0 ? void 0 : _j.bird.updateBird(birdId, req.body));
-    // console.log(updatedBlog)
-    return res.status(200).json(updatedBlog);
+    // console.log(req.body)
+    const cleanHabitatArray = (_k = (_j = req.body.habitat) === null || _j === void 0 ? void 0 : _j.split(" ")) === null || _k === void 0 ? void 0 : _k.filter((item) => item !== "");
+    const cleanColorsArray = (_m = (_l = JSON.parse(req.body.appearance)
+        .color) === null || _l === void 0 ? void 0 : _l.split(" ")) === null || _m === void 0 ? void 0 : _m.filter((item) => item !== "");
+    const appearanceObj = {
+        size: JSON.parse(req.body.appearance).size,
+        color: cleanColorsArray
+    };
+    const updatedBird = yield ((_o = req.context.services) === null || _o === void 0 ? void 0 : _o.bird.updateBird(birdId, Object.assign(Object.assign({}, req.body), { habitat: cleanHabitatArray, appearance: appearanceObj })));
+    return res.status(200).json(updatedBird);
 }));
 exports.updateABird = updateABird;
-//------delete blog--------------
 const deleteBird = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _k;
+    var _p;
     const birdId = req.params.id;
-    //---delete blog---------------
-    const deleteBird = yield ((_k = req.context.services) === null || _k === void 0 ? void 0 : _k.bird.deleteBird(birdId));
+    const deleteBird = yield ((_p = req.context.services) === null || _p === void 0 ? void 0 : _p.bird.deleteBird(birdId));
     return res.status(200).json(deleteBird);
 }));
 exports.deleteBird = deleteBird;

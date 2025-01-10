@@ -12,11 +12,11 @@ export class BirdServices extends InitAdmin {
 
   createBird = async (input: IBird) => {
     try {
-      const newBird = await this.queryDB.birdModel.create(input)
+      await this.queryDB.birdModel.create(input)
 
       return {
-        message: "Bird created successfully",
-        bird: newBird
+        status: "success",
+        message: "Bird created successfully"
       }
     } catch (err) {
       throw err
@@ -25,12 +25,12 @@ export class BirdServices extends InitAdmin {
 
   getSingleBird = async (birdId: string) => {
     try {
-      const blog = await this.queryDB.birdModel.findById(birdId)
-      if (!blog) {
+      const bird = await this.queryDB.birdModel.findById(birdId)
+      if (!bird) {
         throw createError("Bird  not found", 404)
       }
 
-      return blog
+      return bird
     } catch (err) {
       throw err
     }
@@ -40,13 +40,12 @@ export class BirdServices extends InitAdmin {
     try {
       const birds = await this.queryDB.birdModel.find({})
       // console.log("bird", birds)
-      // Create an instance of APIFeatures
+
       return birds
     } catch (error) {
       throw error
     }
   }
-
 
   updateBird = async (birdId: string, input: IBird) => {
     try {
@@ -73,7 +72,6 @@ export class BirdServices extends InitAdmin {
   }
 
   deleteBird = async (birdId: string) => {
-    console.log("birdId", birdId)
     try {
       const bird = await this.queryDB.birdModel.findById(birdId)
       console.log("bird", bird)

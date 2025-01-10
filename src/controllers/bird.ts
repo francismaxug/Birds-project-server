@@ -20,7 +20,7 @@ const createNewBird = catchAsync(
       ?.filter((item: string) => item !== "")
 
     const cleanColorsArray = JSON.parse(appearance)
-      .colors?.split(" ")
+      .color?.split(" ")
       ?.filter((item: string) => item !== "")
 
     const appearanceObj = {
@@ -69,7 +69,6 @@ const createNewBird = catchAsync(
         const tobase64 = imageData.toString("base64")
 
         // Log first 100 characters of base64 string to verify it's correct
-        console.log("Base64 Preview:", tobase64.substring(0, 100))
 
         // Upload to Cloudinary
         const upload = await cloudinary.uploader.upload(
@@ -79,19 +78,15 @@ const createNewBird = catchAsync(
           }
         )
 
-        console.log("Cloudinary upload success:", {
-          url: upload.secure_url,
-          publicId: upload.public_id
-        })
+      
 
         uploadResults.push(upload.secure_url)
       } catch (error) {
-        console.error("Error processing file:")
         // You might want to add specific error handling here
       }
     }
 
-    console.log("Upload Results:", uploadResults)
+    // console.log("Upload Results:", uploadResults)
 
     // Save data to your service
     const data = await req.context.services?.bird.createBird({
@@ -103,17 +98,17 @@ const createNewBird = catchAsync(
       photos: uploadResults
     })
 
-    console.log("Service Response:", data)
+    // console.log("Service Response:", data)
     return res.status(200).json(data)
   }
 )
 
 const getASingleBird = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const blogId = req.params.id
-    const blog = await req.context.services?.bird.getSingleBird(blogId)
+    const birdId = req.params.id
+    const bird = await req.context.services?.bird.getSingleBird(birdId)
 
-    return res.status(200).json(blog)
+    return res.status(200).json(bird)
   }
 )
 
@@ -121,9 +116,9 @@ const getAllBirds = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     // console.log(req)
 
-    const allBlogs = await req.context.services?.bird.getAllBirds()
+    const allBirds = await req.context.services?.bird.getAllBirds()
 
-    return res.status(200).json(allBlogs)
+    return res.status(200).json(allBirds)
   }
 )
 
@@ -131,14 +126,14 @@ const getAllBirds = catchAsync(
 const updateABird = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const birdId = req.params.id
-    console.log(req.body)
+    // console.log(req.body)
 
     const cleanHabitatArray = req.body.habitat
       ?.split(" ")
       ?.filter((item: string) => item !== "")
 
     const cleanColorsArray = JSON.parse(req.body.appearance)
-      .colors?.split(" ")
+      .color?.split(" ")
       ?.filter((item: string) => item !== "")
 
     const appearanceObj = {
