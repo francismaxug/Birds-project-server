@@ -38,11 +38,12 @@ const startApp = (config) => __awaiter(void 0, void 0, void 0, function* () {
         if (process.env.NODE_ENV === "development") {
             exports.app.use((0, morgan_1.default)("dev"));
         }
-        exports.app.use((0, cors_1.default)());
+        exports.app.use((0, cors_1.default)({ origin: "*" }));
         exports.app.use((0, cookie_parser_1.default)());
         exports.app.use(express_1.default.json());
         exports.app.use(express_1.default.urlencoded({ extended: false }));
         exports.app.use((req, res, next) => {
+            ;
             req.context = appContext;
             next();
         });
